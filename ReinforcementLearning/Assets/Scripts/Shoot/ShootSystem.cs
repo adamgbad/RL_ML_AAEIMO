@@ -8,9 +8,7 @@ public class ShootSystem: MonoBehaviour
     [SerializeField] private Transform shootPosition;
 
     public event EventHandler OnBulletDestroy;
-    /*public class OnCollisionEventArgs : EventArgs {
-        public GameObject collisionObj;
-    }*/
+
     private bool canShoot = true;
     private bool outOfAmmo = false;
 

@@ -49,12 +49,9 @@ public class EnvironmentController : MonoBehaviour {
             } else {
                 redAgentGroup.RegisterAgent(item);
             }
-        }
-
-        //Debug.Log(blueAgentGroup.GetRegisteredAgents().Count);
-        //Debug.Log(redAgentGroup.GetRegisteredAgents().Count);
+        }    
     }
-    private float reward = 0;
+    
     private void FixedUpdate() {
         currentTime += 1;
         currentUpdate += 1;
@@ -92,12 +89,6 @@ public class EnvironmentController : MonoBehaviour {
             agent.OnDieEvent += Agent_OnDieEvent;
         }
     }
-    private void UnSubAgentsEvent() {
-        foreach (var agent in agentsList) {
-            agent.OnDieEvent -= Agent_OnDieEvent;
-        }
-    }
-
     private void Agent_OnAccidentEvent(object sender, OnAccidentDestroyEventArgs e) {
         CheckAccident(e.gameObject);
     } 

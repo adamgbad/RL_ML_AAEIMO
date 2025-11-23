@@ -13,32 +13,23 @@ public class AgentInput : MonoBehaviour,IInputActionAssetProvider{
     private AgentActions inputActions;
     private AgentMovement movement;
 
-    Rigidbody m_PlayerRb;
-
     private void Awake() {
         movement = GetComponent<AgentMovement>();
-        LazyInitializeAction();
-        m_PlayerRb = GetComponent<Rigidbody>();
+        InitializeAction();
     }
-    void LazyInitializeAction() {
+    void InitializeAction() {
         if (inputActions != null) {
             return;
         }
         inputActions = new AgentActions();
         inputActions.Enable();
     }
-    private void OnEnable() {
-        inputActions.Tank.Enable();
-    }     
-    private void OnDisable() {
-        inputActions.Tank.Disable();
-    }  
     private void FixedUpdate() {
         movement.Move(inputActions.Tank.movement.ReadValue<Vector2>());       
         movement.TankTowerRotation(inputActions.Tank.towerMovement.ReadValue<Vector2>());
     }
     public (InputActionAsset, IInputActionCollection2) GetInputActionAsset() {
-        LazyInitializeAction();
+        InitializeAction();
         return (inputActions.asset, inputActions);
     }   
 }

@@ -3,18 +3,20 @@ using Unity.MLAgents.Sensors;
 using UnityEngine;
 
 public class AgentSensors : MonoBehaviour {
-    //C:\Users\User\Documents\GitHub\RL\ReinforcementLearning\GPU\Lib\site-packages\torch\onnx.utils.py 1370 sora
 
     [SerializeField] private Transform midPoint;
     [SerializeField] private float laserLength; 
     [SerializeField] private LayerMask laserLayerMask;
     [SerializeField] private LayerMask laserLayerMask2;
+    [SerializeField] private Transform shootPosition;
+
     private int reflectionMaxCount = 5;
     private int reflectionCurrentCount;
-    [SerializeField] private Transform shootPosition;
+
     private RaycastHit currentHit;
     private RaycastHit currentBulletHit;
     private RaycastHit currentTeamMateHit;
+
     private Team hitAgentTeam;
     private Vector3 currentRayDirection;
     private Vector3 currentBulletRayDirection;
@@ -37,7 +39,6 @@ public class AgentSensors : MonoBehaviour {
     }
     public void CollectAgentObservations(VectorSensor sensor, Transform top, TankAgent agent) {       
         sensor.AddObservation(GetBodyPartRotation(top));
-        sensor.AddOneHotObservation((int)agent.AgentTeam, 3);
     }
     public void CollectBufferSensorsObservation(BufferSensorComponent bufferSensor1, BufferSensorComponent bufferSensor2, EnvironmentController environment, Transform middle,ShootSystem shootSystem, TankAgent agent) {
         foreach (TankAgent item in environment.GetRemainedAgents(agent)) {
@@ -80,7 +81,6 @@ public class AgentSensors : MonoBehaviour {
             Ray ray = new Ray(pos, dir);
             RaycastHit hit;           
             if (Physics.Raycast(ray, out hit, remainingLength, laserLayerMask)) {
-                //Debug.DrawLine(pos, hit.point, Color.red);
                 pos = hit.point;
                 dir = Vector3.Reflect(dir, hit.normal);
                 remainingLength -= hit.distance;
@@ -92,7 +92,6 @@ public class AgentSensors : MonoBehaviour {
                 }
             } else {
                 hitAgentTeam = Team.None;
-                //Debug.DrawRay(pos, dir * remainingLength, Color.blue);
                 currentHit = hit;
             }
         }
@@ -100,7 +99,6 @@ public class AgentSensors : MonoBehaviour {
     private bool IsRayHitAgent(RaycastHit hit, Transform t) {
         if (hit.transform != null && t != null) {
             if (hit.transform.TryGetComponent(out TankAgent hitAgent)) {
-                //Debug.Log("itt");
                 hitAgentTeam = hitAgent.AgentTeam;
                 return true;
             }

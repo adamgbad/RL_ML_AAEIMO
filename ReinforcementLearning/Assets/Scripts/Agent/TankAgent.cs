@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Policies;
@@ -17,14 +18,18 @@ public class TankAgent : Agent {
     private AgentRewards agentRewards;
     private AgentInput inputSystem;    
     private ShootSystem shootSystem;
-    
-    [SerializeField] private BufferSensorComponent bufferSensor;
-    [SerializeField] private BufferSensorComponent bufferSensor2;
     private BehaviorParameters behaviors;
     private VectorSensorComponent vectorSensor;
     private RayPerceptionSensorComponent3D rayPer3D;
     private EnvironmentParameters envParameters;
+    private int missedShootsSinceLastHit = 0;
+    private float secondsBetweenShots = 0;
+    private float maxStep = 50000;
+    private int id;
 
+
+    [SerializeField] private BufferSensorComponent bufferSensor;
+    [SerializeField] private BufferSensorComponent bufferSensor2;
     [SerializeField] private int health;
     [SerializeField] private int maxHealth;     
     [SerializeField] private Transform shootPosition;
@@ -35,15 +40,12 @@ public class TankAgent : Agent {
     [SerializeField] private int maxBullet;
     [SerializeField] private int currentBullet;
     [SerializeField] private Transform middlePoint;
-    private int id;
-    private int missedShootsSinceLastHit = 0;
 
     public event EventHandler<OnDestroyEventArgs> OnDieEvent;
     public event EventHandler<OnAccidentDestroyEventArgs> OnAccidentEvent;
 
-    private float maxStep = 50000;
     [Observable(numStackedObservations: 1)] public int MaxHealth { get {  return maxHealth; } }       
-    [Observable(numStackedObservations: 1)] public int Health { get { return health; } private set { health = value; } } //jól mûködik, nincs nortmalizálva
+    [Observable(numStackedObservations: 1)] public int Health { get { return health; } private set { health = value; } }
     [Observable(numStackedObservations: 1)] public int MaxBullet { get { return maxBullet; } }
     [Observable(numStackedObservations: 1)] public int CurrentBullet { get { return currentBullet; } set { currentBullet = value; } }
     public Team AgentTeam { get { return team; } }
@@ -67,15 +69,13 @@ public class TankAgent : Agent {
         agentRewards.AddMissedShotPenalty(this, (float)missedShootsSinceLastHit, maxBullet);
     }
     public override void OnEpisodeBegin() {
-        shootSystem.DestroyBullets();
-        shootSystem.SetShoot();
         SetStartingHealth();
         SetStartingAmmunation();
-        SetMissedShootSinceLastHit();
+        SetShoot();
         SetReward(0);
+        StartCoroutine(CountSeconds());
     }
     public override void CollectObservations(VectorSensor sensor) {
-        //Debug.Log($"{this} jutalma: {GetCumulativeReward()}");
         agentRewards.AddStepPenalty(this, StepCount, maxStep);
 
         agentSensors.CollectRayObservations(sensor, shootSystem, this);
@@ -128,6 +128,13 @@ public class TankAgent : Agent {
             }
         }       
     }
+    public void SetShoot() {
+        shootSystem.DestroyBullets();
+        shootSystem.SetShoot();
+        SetMissedShootSinceLastHit();
+        SetMissedShootSinceLastHit();
+        secondsBetweenShots = 0;
+    }
     public void SetStartingHealth() {
         Health = maxHealth;
     }
@@ -136,5 +143,11 @@ public class TankAgent : Agent {
     }
     public void SetMissedShootSinceLastHit() {
         missedShootsSinceLastHit = 0;
+    }
+    public IEnumerator CountSeconds() {
+        while (true) {
+            secondsBetweenShots += 1f;
+            yield return new WaitForSeconds(1);
+        }
     }
 }
