@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20872b6e6bc110f47bc39d39bb8ed540, type: 3}
+  m_Name: PreniumSO
+  m_EditorClassIdentifier: 
+  currentBullet: 6
+  maxBullet: 6
+  ammoType: 1
+  startingAmmonation: 1
+  ammoPrefab: {fileID: 4656443611419775180, guid: 4f748ce9c5dc2fe459c9ae2abfa3c3eb, type: 3}
+  observationValue: 2
+  minDamage: 60
+  maxDamage: 80
+  penetrationChance: 85

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20872b6e6bc110f47bc39d39bb8ed540, type: 3}
+  m_Name: HESO
+  m_EditorClassIdentifier: 
+  currentBullet: 15
+  maxBullet: 15
+  ammoType: 2
+  startingAmmonation: 1
+  ammoPrefab: {fileID: 4656443611419775180, guid: 7f0d6b085cc146a42a0cc98309323f96, type: 3}
+  observationValue: 1
+  minDamage: 10
+  maxDamage: 90
+  penetrationChance: 100
